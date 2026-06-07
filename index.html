@@ -1,263 +1,129 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CLIProxyAPI（CPA）部署与 NewAPI 接入教程</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CPA 小白无脚本接入 NewAPI 教程</title>
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      padding: 28px;
-      font-family: "Microsoft YaHei", "Segoe UI", Arial, sans-serif;
-      background: #eef1f5;
+      padding: 26px;
+      background: #eef2f7;
       color: #111827;
-      line-height: 1.72;
+      font-family: "Microsoft YaHei", "Segoe UI", Arial, sans-serif;
+      line-height: 1.76;
     }
-    .doc {
-      max-width: 980px;
+    .page {
+      max-width: 900px;
       margin: 0 auto;
-      background: #fff;
+      background: #ffffff;
       border: 2px solid #111827;
       border-radius: 18px;
       overflow: hidden;
-      box-shadow: 0 18px 42px rgba(17,24,39,.18);
+      box-shadow: 0 18px 38px rgba(17, 24, 39, .15);
     }
-    .cover {
+    .hero {
       background: #111827;
-      color: #fff;
-      padding: 34px 38px 30px;
+      color: #ffffff;
+      padding: 30px 34px;
     }
-    .cover h1 {
-      margin: 0 0 12px;
-      font-size: 31px;
-      line-height: 1.28;
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      line-height: 1.25;
+      color: #ffffff;
       font-weight: 900;
-      color: #fff;
     }
-    .cover p {
+    .hero p {
       margin: 0;
-      font-size: 16px;
       color: #e5e7eb;
-      line-height: 1.7;
+      font-size: 16px;
     }
-    .community-note {
-      margin-top: 18px;
+    .qq {
+      margin-top: 16px;
+      display: inline-block;
       background: #fef3c7;
+      color: #111827;
       border: 2px solid #facc15;
-      color: #111827;
-      border-radius: 14px;
-      padding: 13px 15px;
+      border-radius: 12px;
+      padding: 10px 14px;
       font-weight: 900;
-      line-height: 1.65;
-      box-shadow: 0 8px 18px rgba(0,0,0,.12);
     }
-
-    .community-note strong {
-      color: #7c2d12;
+    .main {
+      padding: 28px 34px;
     }
-
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-top: 24px;
-    }
-    .info-card {
-      background: #fff;
-      border: 2px solid rgba(255,255,255,.95);
-      border-radius: 14px;
-      padding: 14px 15px;
-      min-height: 82px;
-      box-shadow: 0 8px 18px rgba(0,0,0,.16);
-    }
-    .info-label {
-      font-size: 12px;
-      font-weight: 900;
-      color: #4b5563;
-      margin-bottom: 6px;
-    }
-    .info-value {
-      font-size: 15px;
-      font-weight: 900;
-      color: #111827;
-      line-height: 1.35;
-    }
-    .green { background: #dcfce7; border-color: #86efac; }
-    .yellow { background: #fef3c7; border-color: #facc15; }
-    .blue { background: #dbeafe; border-color: #93c5fd; }
-    .white { background: #fff; border-color: #fff; }
-    .main { padding: 30px 34px; }
     h2 {
-      font-size: 24px;
-      line-height: 1.35;
-      margin: 34px 0 14px;
+      font-size: 23px;
+      margin: 32px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 3px solid #111827;
       color: #111827;
       font-weight: 900;
-      border-bottom: 3px solid #111827;
-      padding-bottom: 8px;
     }
     h3 {
+      margin: 0 0 8px;
       font-size: 18px;
-      margin: 18px 0 9px;
       color: #111827;
       font-weight: 900;
     }
-    p { margin: 8px 0; color: #111827; font-size: 15.5px; }
-    ul, ol { margin: 8px 0 8px 24px; padding: 0; color: #111827; }
-    li { margin: 7px 0; color: #111827; }
+    p { margin: 8px 0; }
     code {
-      font-family: Consolas, "Cascadia Mono", "Courier New", monospace;
       background: #e5e7eb;
-      color: #111827;
       border: 1px solid #9ca3af;
       border-radius: 6px;
       padding: 2px 6px;
+      font-family: Consolas, "Cascadia Mono", monospace;
       font-weight: 800;
-      font-size: .94em;
+      color: #111827;
     }
     pre {
       background: #111827;
-      color: #fff;
+      color: #ffffff;
+      border: 3px solid #000000;
       border-radius: 12px;
-      padding: 16px;
-      margin: 12px 0;
+      padding: 15px;
       overflow: auto;
-      border: 3px solid #000;
       white-space: pre-wrap;
-      font-family: Consolas, "Cascadia Mono", "Courier New", monospace;
+      font-family: Consolas, "Cascadia Mono", monospace;
       font-size: 14px;
-      line-height: 1.62;
+      line-height: 1.6;
     }
     pre code {
       background: transparent;
-      color: #fff;
       border: none;
+      color: #ffffff;
       padding: 0;
-      font-weight: 700;
     }
-    .notice, .warning, .danger, .success {
-      padding: 15px 17px;
-      margin: 15px 0;
-      border-radius: 10px;
-      color: #111827;
-      font-weight: 800;
-    }
-    .notice { border-left: 8px solid #2563eb; background: #eff6ff; }
-    .warning { border-left: 8px solid #f59e0b; background: #fffbeb; }
-    .danger { border-left: 8px solid #dc2626; background: #fef2f2; }
-    .success { border-left: 8px solid #16a34a; background: #f0fdf4; }
-    .section-card {
-      border: 2px solid #111827;
-      border-radius: 16px;
-      padding: 18px;
-      margin: 16px 0;
-      background: #fff;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 14px 0;
-      background: #fff;
-      border: 2px solid #111827;
-    }
-    th {
-      background: #111827;
-      color: #fff;
-      text-align: left;
-      padding: 12px;
-      border: 1px solid #111827;
-      font-size: 14px;
-      white-space: nowrap;
-    }
-    td {
-      padding: 12px;
-      border: 1.5px solid #374151;
-      color: #111827;
-      vertical-align: top;
-      font-size: 14px;
-    }
-    .toc {
-      border: 2px solid #111827;
-      border-radius: 16px;
-      padding: 18px;
-      background: #f9fafb;
-      margin: 0 0 28px;
-    }
-    .toc-title {
-      font-size: 20px;
-      font-weight: 900;
-      margin-bottom: 12px;
-      color: #111827;
-    }
-    .toc-list {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .toc-item {
-      border: 1.8px solid #374151;
-      background: #fff;
-      border-radius: 10px;
-      padding: 11px 13px;
-      font-weight: 900;
-      color: #111827;
-    }
-    .flow-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin: 16px 0;
-    }
-    .flow-row {
-      display: grid;
-      grid-template-columns: 74px 1fr 210px;
-      gap: 12px;
-      align-items: center;
-      border: 2px solid #111827;
-      border-radius: 14px;
-      background: #fff;
-      padding: 13px;
-    }
-    .flow-num {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: #111827;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      font-size: 18px;
-      margin: auto;
-    }
-    .flow-title {
-      font-weight: 900;
-      font-size: 17px;
-      color: #111827;
-      margin-bottom: 3px;
-    }
-    .flow-desc {
-      font-size: 14px;
-      color: #111827;
-      margin: 0;
-    }
-    .flow-check {
+    .safe {
+      border-left: 8px solid #16a34a;
       background: #f0fdf4;
-      border: 2px solid #16a34a;
-      color: #14532d;
       border-radius: 10px;
-      padding: 9px 10px;
-      font-size: 13px;
-      font-weight: 900;
-      text-align: center;
+      padding: 14px 16px;
+      font-weight: 800;
+      margin: 16px 0;
+    }
+    .warn {
+      border-left: 8px solid #f59e0b;
+      background: #fffbeb;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-weight: 800;
+      margin: 16px 0;
+    }
+    .blue {
+      border-left: 8px solid #2563eb;
+      background: #eff6ff;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-weight: 800;
+      margin: 16px 0;
     }
     .steps {
       display: flex;
       flex-direction: column;
       gap: 14px;
-      margin: 16px 0;
+      margin-top: 14px;
     }
     .step {
       display: grid;
@@ -265,416 +131,255 @@
       gap: 14px;
       border: 2px solid #111827;
       border-radius: 16px;
-      background: #fff;
       padding: 17px;
+      background: #ffffff;
     }
-    .step-num {
+    .num {
       width: 42px;
       height: 42px;
       border-radius: 50%;
       background: #111827;
-      color: #fff;
+      color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 900;
       font-size: 18px;
     }
-    .step-body h3 { margin-top: 0; }
-    .final-flow {
-      border: 3px solid #111827;
-      border-radius: 18px;
-      padding: 18px;
-      background: #f9fafb;
-      margin-top: 18px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 2px solid #111827;
+      margin: 14px 0;
     }
-    .final-step {
-      display: grid;
-      grid-template-columns: 44px 1fr;
-      gap: 12px;
-      align-items: start;
-      padding: 12px 0;
-      border-bottom: 1.5px solid #9ca3af;
-    }
-    .final-step:last-child { border-bottom: none; }
-    .dot {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
+    th {
       background: #111827;
-      color: #fff;
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      color: #ffffff;
+      padding: 12px;
+      text-align: left;
+      border: 1px solid #111827;
+    }
+    td {
+      padding: 12px;
+      border: 1.5px solid #374151;
+      vertical-align: top;
     }
     .footer {
       background: #111827;
-      color: #fff;
-      padding: 24px 34px;
+      color: #ffffff;
+      padding: 22px 34px;
+      font-weight: 800;
     }
-    .footer p { color: #fff; margin: 0; }
-    @media(max-width:780px) {
+    .footer code {
+      background: #ffffff;
+      color: #111827;
+    }
+    @media(max-width:720px) {
       body { padding: 12px; }
-      .cover, .main, .footer { padding: 22px; }
-      .cover h1 { font-size: 25px; }
-      .info-grid { grid-template-columns: 1fr 1fr; }
-      .toc-list { grid-template-columns: 1fr; }
-      .flow-row { grid-template-columns: 54px 1fr; }
-      .flow-check { grid-column: 1 / -1; text-align: left; }
+      .hero, .main, .footer { padding: 22px; }
+      .hero h1 { font-size: 25px; }
       .step { grid-template-columns: 1fr; }
-    }
-    @media(max-width:520px) {
-      .info-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
-
 <body>
-  <div class="doc">
-    <div class="cover">
-      <div class="cover-title">
-        <h1>CLIProxyAPI（CPA）部署与 NewAPI 接入教程</h1>
-        <p>一份给新手看的完整流程：下载安装到配置代理、上传认证 JSON、刷新配额，再把 CPA 接入 NewAPI。</p>
-        <div class="community-note">
-          CPA 使用教程、AI 交流分享可以加 Q 群：<strong>753488355</strong>
-        </div>
-      </div>
-
-      <div class="info-grid">
-        <div class="info-card green">
-          <div class="info-label">适用系统</div>
-          <div class="info-value">Windows x64</div>
-        </div>
-        <div class="info-card white">
-          <div class="info-label">示例版本</div>
-          <div class="info-value">CLIProxyAPI 7.1.44</div>
-        </div>
-        <div class="info-card blue">
-          <div class="info-label">默认端口</div>
-          <div class="info-value">8317</div>
-        </div>
-        <div class="info-card yellow">
-          <div class="info-label">核心配置</div>
-          <div class="info-value">config.yaml<br>proxy-url<br>api-keys</div>
-        </div>
-      </div>
+  <div class="page">
+    <div class="hero">
+      <h1>CPA 小白无脚本接入 NewAPI 教程</h1>
+      <p>不运行脚本，不改系统设置。全程只做：下载、解压、复制配置、手动改几行、双击启动。</p>
+      <div class="qq">CPA 使用教程、AI 交流分享可以加 Q 群：753488355</div>
     </div>
 
     <div class="main">
-      <div class="toc">
-        <div class="toc-title">教程目录</div>
-        <div class="toc-list">
-          <div class="toc-item">1. 先理解 CPA 和 NewAPI 的关系</div>
-          <div class="toc-item">2. 下载正确的 Windows 安装包</div>
-          <div class="toc-item">3. 整理安装目录</div>
-          <div class="toc-item">4. 创建并修改 config.yaml</div>
-          <div class="toc-item">5. 给 CPA 配置代理</div>
-          <div class="toc-item">6. 启动 CPA 并进入后台</div>
-          <div class="toc-item">7. 上传认证 JSON 并刷新配额</div>
-          <div class="toc-item">8. 把 CPA 接入 NewAPI</div>
-          <div class="toc-item">9. 常见错误排查</div>
-          <div class="toc-item">10. 最终验收流程</div>
-        </div>
+      <div class="safe">
+        本教程不要求运行任何脚本。你只需要按步骤下载 CPA，复制一个配置文件，手动改几行内容，然后双击启动程序。
       </div>
 
-      <h2>1. 先理解 CPA 和 NewAPI 的关系</h2>
-      <div class="section-card">
-        <p><b>CPA 的作用：</b>在本机启动一个 OpenAI 兼容 API 服务，把 Codex / OpenAI / Gemini / Claude 等认证统一管理起来。</p>
-        <p><b>NewAPI 的作用：</b>把 CPA 当成一个普通 OpenAI 上游渠道，统一分发给你的客户端使用。</p>
+      <h2>一、你需要准备什么</h2>
+      <table>
+        <tr>
+          <th>需要准备</th>
+          <th>说明</th>
+        </tr>
+        <tr>
+          <td>CPA 压缩包</td>
+          <td>下载 <code>CLIProxyAPI_xxx_windows_amd64.zip</code>。普通 Windows 电脑选 amd64。</td>
+        </tr>
+        <tr>
+          <td>安装目录</td>
+          <td>建议固定放到 <code>D:\CLIProxyAPI</code>。</td>
+        </tr>
+        <tr>
+          <td>代理软件</td>
+          <td>例如 Clash / Mihomo。常见 HTTP 代理端口是 <code>7890</code>。</td>
+        </tr>
+        <tr>
+          <td>认证 JSON</td>
+          <td>后面在 CPA 后台上传，用来让 CPA 识别你的 Codex / OpenAI 认证。</td>
+        </tr>
+      </table>
 
-        <div class="flow-list">
-          <div class="flow-row">
-            <div class="flow-num">1</div>
-            <div>
-              <div class="flow-title">客户端发起请求</div>
-              <p class="flow-desc">例如 ChatBox、Cherry Studio、Cursor、Open WebUI 或你自己的应用。</p>
-            </div>
-            <div class="flow-check">入口层</div>
-          </div>
-          <div class="flow-row">
-            <div class="flow-num">2</div>
-            <div>
-              <div class="flow-title">NewAPI 接收并转发</div>
-              <p class="flow-desc">NewAPI 只需要访问本机或局域网里的 CPA 地址。</p>
-            </div>
-            <div class="flow-check">不需要额外挂梯子</div>
-          </div>
-          <div class="flow-row">
-            <div class="flow-num">3</div>
-            <div>
-              <div class="flow-title">CPA 负责真正访问上游</div>
-              <p class="flow-desc">CPA 根据认证 JSON、API Key、代理配置去访问 OpenAI / Codex 等服务。</p>
-            </div>
-            <div class="flow-check">必须配置代理</div>
-          </div>
-          <div class="flow-row">
-            <div class="flow-num">4</div>
-            <div>
-              <div class="flow-title">代理连接海外服务</div>
-              <p class="flow-desc">真正出国的是 CPA，因此代理写在 CPA 的 <code>proxy-url</code>。</p>
-            </div>
-            <div class="flow-check">核心是 proxy-url</div>
-          </div>
-        </div>
-
-        <div class="success">
-          最重要的结论：NewAPI 不需要额外挂梯子。只要 NewAPI 能访问 CPA 的 <code>http://127.0.0.1:8317/v1</code>，真正的代理问题交给 CPA 处理。
-        </div>
-      </div>
-
-      <h2>2. 下载正确的 Windows 安装包</h2>
+      <h2>二、最简单流程：照着 7 步走</h2>
       <div class="steps">
         <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <h3>打开官方 Release 页面</h3>
-            <p>浏览器访问：</p>
+          <div class="num">1</div>
+          <div>
+            <h3>下载 CPA</h3>
+            <p>打开 GitHub Release 页面：</p>
             <pre><code>https://github.com/router-for-me/CLIProxyAPI/releases</code></pre>
+            <p>普通 Windows 电脑下载这个类型：</p>
+            <pre><code>CLIProxyAPI_xxx_windows_amd64.zip</code></pre>
+            <p>不要下载 <code>windows_aarch64</code>，那个是 ARM 电脑用的。</p>
           </div>
         </div>
+
         <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <h3>普通 Windows 电脑下载 amd64 包</h3>
-            <p>大多数 Intel / AMD 台式机或笔记本，下载这个：</p>
-            <pre><code>CLIProxyAPI_7.1.44_windows_amd64.zip</code></pre>
-            <table>
-              <tr><th>文件名</th><th>适用场景</th></tr>
-              <tr><td><code>windows_amd64.zip</code></td><td>普通 Intel / AMD 64 位 Windows。绝大多数电脑选这个。</td></tr>
-              <tr><td><code>windows_aarch64.zip</code></td><td>Windows ARM 设备，例如骁龙 ARM 笔记本。</td></tr>
-              <tr><td><code>linux_amd64.tar.gz</code></td><td>Linux x64 服务器。</td></tr>
-              <tr><td><code>darwin_amd64 / darwin_aarch64</code></td><td>macOS，对应 Intel Mac / Apple Silicon Mac。</td></tr>
-            </table>
+          <div class="num">2</div>
+          <div>
+            <h3>解压到固定目录</h3>
+            <p>把压缩包里面的文件放到：</p>
+            <pre><code>D:\CLIProxyAPI</code></pre>
+            <p>这个目录里至少应该有：</p>
+            <pre><code>cli-proxy-api.exe
+config.example.yaml</code></pre>
           </div>
         </div>
-      </div>
 
-      <h2>3. 整理安装目录</h2>
-      <div class="section-card">
-        <p>建议统一安装到：</p>
-        <pre><code>D:\CLIProxyAPI</code></pre>
-        <p>解压后一般会看到这些文件：</p>
-        <ul>
-          <li><code>cli-proxy-api.exe</code></li>
-          <li><code>config.example.yaml</code></li>
-          <li><code>README.md</code></li>
-          <li><code>README_CN.md</code></li>
-          <li><code>LICENSE</code></li>
-        </ul>
-        <p>建议把这些文件都放到 <code>D:\CLIProxyAPI</code>，最终结构如下：</p>
-        <pre><code>D:\CLIProxyAPI
-├─ cli-proxy-api.exe
-├─ config.example.yaml
-├─ config.yaml
-├─ README.md
-├─ README_CN.md
-└─ LICENSE</code></pre>
-        <div class="warning">
-          不建议保留成 <code>D:\CLIProxyAPI\CLIProxyAPI_7.1.44_windows_amd64\...</code> 这种套娃路径。路径越短，后续排查越简单。
-        </div>
-      </div>
-
-      <h2>4. 创建并修改 config.yaml</h2>
-      <div class="danger">
-        不要自己手写一个只有几行的 <code>config.yaml</code>。必须复制完整的 <code>config.example.yaml</code>，否则可能出现 <code>API server started successfully on :0</code>，导致 8317 访问不了。
-      </div>
-
-      <div class="steps">
         <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <h3>复制完整配置模板</h3>
-            <p>复制：</p>
-            <pre><code>D:\CLIProxyAPI\config.example.yaml</code></pre>
-            <p>重命名为：</p>
-            <pre><code>D:\CLIProxyAPI\config.yaml</code></pre>
+          <div class="num">3</div>
+          <div>
+            <h3>复制配置文件</h3>
+            <p>在 <code>D:\CLIProxyAPI</code> 里找到：</p>
+            <pre><code>config.example.yaml</code></pre>
+            <p>复制一份，然后重命名为：</p>
+            <pre><code>config.yaml</code></pre>
+            <div class="warn">
+              注意：一定是复制完整的 <code>config.example.yaml</code>，不要自己新建一个只有几行的 config.yaml。
+            </div>
           </div>
         </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <h3>确认端口是 8317</h3>
-            <p>打开 <code>config.yaml</code>，确认有：</p>
-            <pre><code>host: ""
 
-port: 8317</code></pre>
-            <p><code>port: 8317</code> 是 CPA 后台和 API 的监听端口。</p>
-          </div>
-        </div>
         <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <h3>设置管理后台密码</h3>
+          <div class="num">4</div>
+          <div>
+            <h3>打开 config.yaml，改 4 个地方</h3>
+            <p>用记事本打开 <code>D:\CLIProxyAPI\config.yaml</code>。</p>
+
+            <p><b>第 1 个地方：确认端口</b></p>
+            <pre><code>port: 8317</code></pre>
+
+            <p><b>第 2 个地方：设置后台登录密码</b></p>
             <p>找到：</p>
             <pre><code>remote-management:
-  allow-remote: false
   secret-key: ""</code></pre>
-            <p>改成自己的密码，例如：</p>
+            <p>改成：</p>
             <pre><code>remote-management:
-  allow-remote: false
   secret-key: "admin123"</code></pre>
-            <div class="notice">
-              第一次启动后，CPA 可能会把明文密码自动改成 <code>$2a$...</code> 这种哈希，这是正常现象。登录后台仍然用你设置的原始密码，例如 <code>admin123</code>。
-            </div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-body">
-            <h3>设置给 NewAPI 用的 API Key</h3>
+
+            <p><b>第 3 个地方：设置 NewAPI 调用密码</b></p>
             <p>找到：</p>
             <pre><code>api-keys:
   - "your-api-key-1"
   - "your-api-key-2"
   - "your-api-key-3"</code></pre>
-            <p>建议改成一个自己定义的 Key：</p>
+            <p>改成：</p>
             <pre><code>api-keys:
   - "sk-cpa-test-123"</code></pre>
-            <table>
-              <tr><th>配置项</th><th>用途</th><th>谁使用</th></tr>
-              <tr><td><code>remote-management.secret-key</code></td><td>登录 CPA 管理后台</td><td>人，在浏览器里登录</td></tr>
-              <tr><td><code>api-keys</code></td><td>调用 CPA 的 OpenAI 兼容接口</td><td>NewAPI / Cherry Studio / Cursor 等客户端</td></tr>
-            </table>
-          </div>
-        </div>
-      </div>
 
-      <h2>5. 给 CPA 配置代理</h2>
-      <div class="section-card">
-        <p>如果要使用 OpenAI / Codex / Claude / Gemini 等海外服务，CPA 必须能走代理。</p>
-        <p>在 <code>config.yaml</code> 中找到：</p>
-        <pre><code>proxy-url: ""</code></pre>
-        <p>如果你用 Clash / Mihomo，常见 HTTP 代理端口是 7890：</p>
-        <pre><code>proxy-url: "http://127.0.0.1:7890"</code></pre>
-        <p>如果你用 SOCKS5 代理，常见端口可能是 1080：</p>
-        <pre><code>proxy-url: "socks5://127.0.0.1:1080"</code></pre>
-        <p>如果代理需要用户名密码：</p>
-        <pre><code>proxy-url: "http://用户名:密码@127.0.0.1:7890"</code></pre>
-        <div class="warning">
-          如果刷新配额时报 <code>auth.openai.com/oauth/token EOF</code>，优先检查这里。常见处理方式：确认代理端口、代理软件切全局模式、换一个支持 OpenAI 的节点。
-        </div>
-      </div>
+            <p><b>第 4 个地方：设置代理</b></p>
+            <p>找到：</p>
+            <pre><code>proxy-url: ""</code></pre>
+            <p>如果你的代理端口是 7890，就改成：</p>
+            <pre><code>proxy-url: "http://127.0.0.1:7890"</code></pre>
 
-      <h2>6. 启动 CPA 并进入后台</h2>
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <h3>启动程序</h3>
-            <p>双击运行：</p>
-            <pre><code>D:\CLIProxyAPI\cli-proxy-api.exe</code></pre>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <h3>看控制台日志</h3>
-            <p>成功标志：</p>
-            <pre><code>API server started successfully on :8317</code></pre>
-            <p>管理后台注册成功：</p>
-            <pre><code>management routes registered after secret key configuration</code></pre>
-            <div class="danger">
-              如果看到 <code>API server started successfully on :0</code>，说明 <code>config.yaml</code> 不完整，或者程序没读到完整配置。回到第 4 步重新复制完整配置模板。
+            <div class="blue">
+              不知道代理端口就先试 <code>7890</code>。Clash / Mihomo 很多默认都是这个端口。
             </div>
           </div>
         </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <h3>打开管理后台</h3>
-            <p>浏览器访问：</p>
-            <pre><code>http://localhost:8317/management.html</code></pre>
-            <p>使用 <code>remote-management.secret-key</code> 设置的密码登录。</p>
-          </div>
-        </div>
-      </div>
 
-      <h2>7. 上传认证 JSON 并刷新配额</h2>
-      <div class="steps">
         <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <h3>上传认证文件</h3>
-            <p>进入 CPA 后台左侧菜单：</p>
-            <pre><code>认证文件管理 / Auth Files</code></pre>
-            <p>点击上传，把 Codex / OpenAI 的认证 JSON 上传进去。</p>
+          <div class="num">5</div>
+          <div>
+            <h3>双击启动 CPA</h3>
+            <p>双击：</p>
+            <pre><code>D:\CLIProxyAPI\cli-proxy-api.exe</code></pre>
+            <p>黑窗口里看到下面这句，就说明启动成功：</p>
+            <pre><code>API server started successfully on :8317</code></pre>
+            <p>如果看到 <code>:0</code>，说明配置文件没复制完整，回到第 3 步重新复制。</p>
           </div>
         </div>
+
         <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <h3>确认认证文件被识别</h3>
-            <p>页面上应该能看到类似：</p>
-            <ul>
-              <li>认证文件数量：1</li>
-              <li>类型：Codex</li>
-              <li>文件名：例如 <code>01.json</code></li>
-            </ul>
-            <p>CPA 控制台可能出现：</p>
-            <pre><code>full client load complete - 1 clients (1 auth entries ...)</code></pre>
+          <div class="num">6</div>
+          <div>
+            <h3>打开 CPA 后台并上传 JSON</h3>
+            <p>浏览器打开：</p>
+            <pre><code>http://localhost:8317/management.html</code></pre>
+            <p>用你刚才设置的后台密码登录，例如：</p>
+            <pre><code>admin123</code></pre>
+            <p>进入后台后，找到“认证文件管理”，上传你的 Codex / OpenAI JSON。</p>
+            <p>然后去“配额管理”里刷新配额。</p>
           </div>
         </div>
+
         <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <h3>刷新配额</h3>
-            <p>进入配额管理，点击刷新。</p>
+          <div class="num">7</div>
+          <div>
+            <h3>NewAPI 添加 OpenAI 渠道</h3>
             <table>
-              <tr><th>现象</th><th>含义</th><th>处理</th></tr>
-              <tr><td>能显示额度</td><td>认证与代理基本成功</td><td>继续接入 NewAPI</td></tr>
-              <tr><td><code>EOF</code></td><td>OpenAI OAuth 连接被中断</td><td>检查 <code>proxy-url</code>、切全局、换节点</td></tr>
-              <tr><td>401 / 403</td><td>认证失效或权限问题</td><td>重新上传 JSON 或重新登录</td></tr>
-              <tr><td>超时</td><td>网络或代理不稳定</td><td>换节点，确认代理端口</td></tr>
+              <tr>
+                <th>NewAPI 配置项</th>
+                <th>填写内容</th>
+              </tr>
+              <tr>
+                <td>渠道类型</td>
+                <td>OpenAI</td>
+              </tr>
+              <tr>
+                <td>Base URL</td>
+                <td><code>http://127.0.0.1:8317/v1</code></td>
+              </tr>
+              <tr>
+                <td>API Key</td>
+                <td>填你在 <code>api-keys</code> 里设置的值，例如 <code>sk-cpa-test-123</code></td>
+              </tr>
             </table>
           </div>
         </div>
       </div>
 
-      <h2>8. 把 CPA 接入 NewAPI</h2>
-      <div class="section-card">
-        <p>NewAPI 里把 CPA 当成一个普通 OpenAI 渠道即可。</p>
-        <table>
-          <tr><th>NewAPI 配置项</th><th>填写内容</th></tr>
-          <tr><td>渠道类型</td><td>OpenAI</td></tr>
-          <tr><td>渠道名称</td><td>CPA-Codex 或 CPA-本地</td></tr>
-          <tr><td>Base URL</td><td><code>http://127.0.0.1:8317/v1</code></td></tr>
-          <tr><td>API Key</td><td>填写 CPA 的 <code>api-keys</code>，例如 <code>sk-cpa-test-123</code></td></tr>
-        </table>
-        <div class="notice">
-          如果 NewAPI 和 CPA 在同一台电脑上，用 <code>http://127.0.0.1:8317/v1</code>。
-        </div>
-        <div class="warning">
-          如果 NewAPI 跑在 Docker 里，<code>127.0.0.1</code> 指的是容器自己，不是宿主机。此时要用宿主机 IP、Docker 网关地址，或 host 网络模式。
-        </div>
-      </div>
-
-      <h2>9. 常见错误排查</h2>
+      <h2>三、如果出问题，先看这里</h2>
       <table>
-        <tr><th>问题</th><th>最可能原因</th><th>解决方法</th></tr>
-        <tr><td>浏览器打不开 <code>localhost:8317</code></td><td>CPA 没启动，或端口不是 8317</td><td>看控制台是否有 <code>:8317</code>。如果是 <code>:0</code>，修复 <code>config.yaml</code>。</td></tr>
-        <tr><td>日志显示 <code>started successfully on :0</code></td><td><code>config.yaml</code> 不完整</td><td>用完整 <code>config.example.yaml</code> 复制为 <code>config.yaml</code>。</td></tr>
-        <tr><td>登录后台失败</td><td>管理密码不对</td><td>检查 <code>remote-management.secret-key</code>。如果已变成 <code>$2a$...</code>，仍用原始密码登录。</td></tr>
-        <tr><td>刷新配额报 <code>EOF</code></td><td>代理没通、规则没覆盖、节点被拒绝</td><td>配置 <code>proxy-url</code>，代理切全局，换支持 OpenAI 的节点。</td></tr>
-        <tr><td>GitHub rate limit exceeded</td><td>GitHub API 限流</td><td>通常不影响 CPA 主功能。只要后台能打开，可暂时忽略。</td></tr>
-        <tr><td>NewAPI 渠道测试失败</td><td>Base URL / API Key 错，或 CPA 不可达</td><td>确认 <code>http://127.0.0.1:8317/v1</code> 和 <code>api-keys</code>。</td></tr>
-        <tr><td>Cherry Studio 能用，但 Codex 401</td><td>协议、模型名、认证状态或 API Key 不一致</td><td>先请求 <code>/v1/models</code> 看模型列表，再检查 CPA 日志是否有 401 或 EOF。</td></tr>
+        <tr>
+          <th>你看到的问题</th>
+          <th>怎么处理</th>
+        </tr>
+        <tr>
+          <td>后台打不开</td>
+          <td>确认黑窗口里有没有 <code>:8317</code>。如果是 <code>:0</code>，重新复制完整的 <code>config.example.yaml</code> 为 <code>config.yaml</code>。</td>
+        </tr>
+        <tr>
+          <td>刷不出配额 / 出现 EOF</td>
+          <td>代理没通。先把代理软件切成全局模式，再换一个支持 OpenAI 的节点。</td>
+        </tr>
+        <tr>
+          <td>NewAPI 测试失败</td>
+          <td>确认 Base URL 是 <code>http://127.0.0.1:8317/v1</code>，API Key 是 <code>api-keys</code> 里设置的那个。</td>
+        </tr>
+        <tr>
+          <td>不知道代理端口</td>
+          <td>Clash / Mihomo 常见是 <code>7890</code>。如果不对，就去代理软件设置里找 HTTP 代理端口。</td>
+        </tr>
       </table>
 
-      <h2>10. 最终验收流程</h2>
-      <div class="final-flow">
-        <div class="final-step"><div class="dot">1</div><div><b>下载</b><p>在 GitHub Release 下载 <code>CLIProxyAPI_xxx_windows_amd64.zip</code>。</p></div></div>
-        <div class="final-step"><div class="dot">2</div><div><b>放置</b><p>解压后把 <code>cli-proxy-api.exe</code> 和 <code>config.example.yaml</code> 放到 <code>D:\CLIProxyAPI</code>。</p></div></div>
-        <div class="final-step"><div class="dot">3</div><div><b>配置</b><p>复制 <code>config.example.yaml</code> 为 <code>config.yaml</code>，确认 <code>port: 8317</code>，设置后台密码、<code>api-keys</code> 和 <code>proxy-url</code>。</p></div></div>
-        <div class="final-step"><div class="dot">4</div><div><b>启动</b><p>运行 <code>cli-proxy-api.exe</code>，日志必须看到 <code>API server started successfully on :8317</code>。</p></div></div>
-        <div class="final-step"><div class="dot">5</div><div><b>认证</b><p>打开 <code>http://localhost:8317/management.html</code>，上传 Codex / OpenAI JSON，并刷新配额。</p></div></div>
-        <div class="final-step"><div class="dot">6</div><div><b>接入</b><p>NewAPI 添加 OpenAI 渠道，Base URL 填 <code>http://127.0.0.1:8317/v1</code>，API Key 填 CPA 的 <code>api-keys</code>。</p></div></div>
+      <div class="blue">
+        记住一句话：NewAPI 不用额外挂梯子。真正访问 OpenAI / Codex 的是 CPA，所以只要 CPA 的代理配置正确即可。
       </div>
     </div>
 
     <div class="footer">
-      <p><b>一句话记住：</b>CPA 是真正访问 OpenAI / Codex 的本地中转层；NewAPI 只需要把 CPA 当成 OpenAI 上游，填 <code>http://127.0.0.1:8317/v1</code> 和 CPA 的 <code>api-keys</code> 即可。</p>
-      <p style="margin-top:12px;"><b>交流补充：</b>CPA 使用教程、AI 交流分享可以加 Q 群：<code>753488355</code></p>
+      CPA 使用教程、AI 交流分享可以加 Q 群：<code>753488355</code>
     </div>
   </div>
 </body>
